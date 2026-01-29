@@ -1,0 +1,227 @@
+/* Toolbar.css - Styles for the drawing tools sidebar */
+
+.toolbar {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toolbar-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.toolbar-section {
+  margin-bottom: 2rem;
+}
+
+.toolbar-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+}
+
+.toolbar-label-small {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Color palette */
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.color-btn {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.color-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.color-btn.selected {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 15px var(--accent-primary);
+  transform: scale(1.05);
+}
+
+/* Custom color picker */
+.custom-color {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.color-picker {
+  width: 60px;
+  height: 35px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
+}
+
+/* Current color preview */
+.current-color-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.8rem;
+  background: rgba(0, 217, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.color-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid var(--accent-primary);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+}
+
+/* Stroke width buttons */
+.stroke-widths {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.stroke-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+}
+
+.stroke-btn:hover {
+  background: rgba(0, 217, 255, 0.1);
+  border-color: var(--accent-primary);
+  transform: translateX(5px);
+}
+
+.stroke-btn.selected {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+}
+
+.stroke-preview {
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.stroke-label {
+  font-weight: 600;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Custom stroke slider */
+.custom-stroke {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stroke-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+.stroke-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--accent-primary);
+  transition: all 0.3s ease;
+}
+
+.stroke-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 20px var(--accent-primary);
+}
+
+.stroke-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px var(--accent-primary);
+}
+
+/* Stroke preview canvas */
+.stroke-preview-canvas {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 1rem;
+  }
+
+  .color-palette {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
