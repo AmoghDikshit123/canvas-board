@@ -25,6 +25,8 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
   
   // Store all strokes for undo functionality
   const strokesRef = useRef([]);
+  // Current stroke id for the active drag (group segments under one id)
+  const currentStrokeIdRef = useRef(null);
   
   // Store remote cursors (other users' cursor positions)
   const remoteCursorsRef = useRef(new Map());
@@ -113,6 +115,9 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
     // Set drawing state
     isDrawingRef.current = true;
     lastPosRef.current = pos;
+    // Assign a single id for this drag gesture so undo can remove whole gesture
+    const socket = getSocket();
+    if (socket) currentStrokeIdRef.current = `${socket.id}-${Date.now()}`;
   }, [getCanvasCoordinates]);
 
   /**
@@ -138,19 +143,22 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
 
     // Create stroke data
     const strokeData = {
-    start: lastPosRef.current,
-    end: currentPos,
-    style: style,
-    id: crypto.randomUUID()   // 🔥 FIXED
-  };
-
+      start: lastPosRef.current,
+      end: currentPos,
+      style: style,
+      id: currentStrokeIdRef.current || `${socket.id}-${Date.now()}`
+    };
 
     // Add to local history
     strokesRef.current.push(strokeData);
 
     // Send to server (will be broadcast to other users)
-    socket.emit('drawing_step', strokeData);
-
+    socket.emit('drawing_step', {
+      start: lastPosRef.current,
+      end: currentPos,
+      style: style,
+      id: strokeData.id
+    });
 
     // Update last position for next segment
     lastPosRef.current = currentPos;
@@ -161,6 +169,8 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
    */
   const handleMouseUp = useCallback(() => {
     isDrawingRef.current = false;
+    // Clear current stroke id after finishing the gesture
+    currentStrokeIdRef.current = null;
   }, []);
 
   /**
@@ -217,15 +227,10 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
     initSocket();
     const socket = getSocket();
 
-    let hasJoined = false;
-
     if (socket) {
-      // Join the room (only once)
-      if (!hasJoined) {
-        socket.emit('join_room', roomId);
-        hasJoined = true;
-        setIsConnected(true);
-      }
+      // Join the room
+      socket.emit('join_room', roomId);
+      setIsConnected(true);
 
       // ============================================
       // SOCKET EVENT LISTENERS
@@ -310,46 +315,33 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
         socket.off('user_disconnected');
       }
     };
-  }, [roomId]);
+  }, [roomId, onUsersUpdate, drawLine, redrawCanvas, drawRemoteCursors]);
 
   /**
    * Effect 2: Handle window resize
    * Adjust canvas size when window is resized
    */
   useEffect(() => {
-  const handleResize = () => {
-    const canvas = canvasRef.current;
-    const ctx = ctxRef.current;
-    if (!canvas || !ctx) return;
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-    // Save current drawing as image data
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      // Save current drawing
+      const tempStrokes = [...strokesRef.current];
 
-    // Resize canvas
-    const newWidth = window.innerWidth - 300;
-    const newHeight = window.innerHeight - 80;
+      // Resize canvas
+      canvas.width = window.innerWidth - 300;
+      canvas.height = window.innerHeight - 80;
+
+      // Restore drawing
+      strokesRef.current = tempStrokes;
+      redrawCanvas();
+    };
+
+    window.addEventListener('resize', handleResize);
     
-    canvas.width = newWidth;
-    canvas.height = newHeight;
-
-    // Restore the image
-    ctx.putImageData(imageData, 0, 0);
-  };
-
-  // Debounce resize to prevent excessive calls
-  let resizeTimeout;
-  const debouncedResize = () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(handleResize, 250);
-  };
-
-  window.addEventListener('resize', debouncedResize);
-  
-  return () => {
-    window.removeEventListener('resize', debouncedResize);
-    clearTimeout(resizeTimeout);
-  };
-}, []);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [redrawCanvas]);
 
   // ============================================
   // RENDER
@@ -400,7 +392,7 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export default Canvas;

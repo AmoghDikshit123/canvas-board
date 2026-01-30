@@ -1,0 +1,152 @@
+// state-manager.js - Manages the drawing history (all strokes) for each room
+// This is the "global truth" - what has been drawn and who drew it
+
+class StateManager {
+  constructor() {
+    // Store history for each room
+    // Structure: { roomId: { strokes: [] } }
+    this.roomStates = new Map();
+  }
+
+  /**
+   * Get the complete drawing history for a room
+   * This is used when a new user joins - they need to see what was already drawn
+   * @param {string} roomId - The room identifier
+   * @returns {Array} Array of all strokes in this room
+   */
+  getHistory(roomId) {
+    const state = this.roomStates.get(roomId);
+    
+    // If room doesn't exist yet, return empty array
+    if (!state) return [];
+    
+    return state.strokes;
+  }
+
+  /**
+   * Add a new stroke to the room's history
+   * @param {string} roomId - The room identifier
+   * @param {object} stroke - The stroke data (contains start, end, style, userId, etc.)
+   */
+  addStroke(roomId, stroke) {
+    // If room doesn't exist, create it
+    if (!this.roomStates.has(roomId)) {
+      this.roomStates.set(roomId, {
+        strokes: [] // Array to store all drawing strokes
+      });
+    }
+
+    const state = this.roomStates.get(roomId);
+    
+    // Add the stroke to the end of the array
+    state.strokes.push(stroke);
+    
+    console.log(`✏️ Stroke added to room ${roomId}. Total strokes: ${state.strokes.length}`);
+  }
+
+  /**
+   * Undo the last stroke made by a specific user
+   * This is the tricky part - we need to remove ONLY this user's last stroke,
+   * not anyone else's strokes
+   * @param {string} roomId - The room identifier
+   * @param {string} userId - The socket ID of the user who wants to undo
+   * @returns {object|null} The removed stroke, or null if nothing to undo
+   */
+  undoStroke(roomId, userId) {
+    const state = this.roomStates.get(roomId);
+    
+    if (!state || state.strokes.length === 0) {
+      return null; // Nothing to undo
+    }
+
+    // Find the LAST stroke made by this user (works even if a stroke is stored as multiple segments)
+    let lastStrokeIndex = -1;
+    for (let i = state.strokes.length - 1; i >= 0; i--) {
+      if (state.strokes[i].userId === userId) {
+        lastStrokeIndex = i;
+        break;
+      }
+    }
+
+    if (lastStrokeIndex === -1) return null; // nothing to undo
+
+    // Determine the stroke id for that last stroke (all segments of the gesture share this id)
+    const strokeId = state.strokes[lastStrokeIndex].id;
+
+    // Remove all segments that share the same stroke id
+    const removedParts = state.strokes.filter(s => s.id === strokeId);
+    state.strokes = state.strokes.filter(s => s.id !== strokeId);
+
+    console.log(`↩️ Removed ${removedParts.length} segments for stroke ${strokeId} from room ${roomId}`);
+
+    // Return a minimal object describing the removed stroke (id is what clients need)
+    return { id: strokeId };
+  }
+
+  /**
+   * Clear all strokes in a room (clear canvas functionality)
+   * @param {string} roomId - The room identifier
+   */
+  clearRoom(roomId) {
+    const state = this.roomStates.get(roomId);
+    
+    if (state) {
+      // Empty the strokes array
+      state.strokes = [];
+      console.log(`🧹 Room ${roomId} cleared`);
+    }
+  }
+
+  /**
+   * Delete a room entirely (cleanup when room is empty)
+   * @param {string} roomId - The room identifier
+   */
+  deleteRoom(roomId) {
+    const deleted = this.roomStates.delete(roomId);
+    
+    if (deleted) {
+      console.log(`🗑️ Room ${roomId} state deleted`);
+    }
+  }
+
+  /**
+   * Get the number of strokes in a room
+   * @param {string} roomId - The room identifier
+   * @returns {number} Number of strokes
+   */
+  getStrokeCount(roomId) {
+    const state = this.roomStates.get(roomId);
+    return state ? state.strokes.length : 0;
+  }
+
+  /**
+   * Get statistics about a room
+   * @param {string} roomId - The room identifier
+   * @returns {object} Statistics object
+   */
+  getRoomStats(roomId) {
+    const state = this.roomStates.get(roomId);
+    
+    if (!state) {
+      return { strokeCount: 0, users: [] };
+    }
+
+    // Count strokes per user
+    const userStrokeCounts = {};
+    
+    state.strokes.forEach(stroke => {
+      if (!userStrokeCounts[stroke.userId]) {
+        userStrokeCounts[stroke.userId] = 0;
+      }
+      userStrokeCounts[stroke.userId]++;
+    });
+
+    return {
+      strokeCount: state.strokes.length,
+      userStrokeCounts
+    };
+  }
+}
+
+// Export the class so it can be used in server.js
+module.exports = StateManager;

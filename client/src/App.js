@@ -25,26 +25,26 @@ function App() {
    * Handle joining a room
    * This function is passed down to RoomSelector component
    */
-  const handleJoinRoom = (roomId) => {
+  const handleJoinRoom = React.useCallback((roomId) => {
     setCurrentRoom(roomId);
-  };
+  }, []);
 
   /**
    * Handle leaving a room
    * Resets the room state so user can join a different room
    */
-  const handleLeaveRoom = () => {
+  const handleLeaveRoom = React.useCallback(() => {
     setCurrentRoom(null);
     setUsers([]);
-  };
+  }, []);
 
   /**
    * Update the list of users when new users join or leave
    * This function is passed down to Canvas component
    */
-  const handleUsersUpdate = (usersList) => {
+  const handleUsersUpdate = React.useCallback((usersList) => {
     setUsers(usersList);
-  };
+  }, []);
 
   // ============================================
   // CONDITIONAL RENDERING
