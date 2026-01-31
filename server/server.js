@@ -35,12 +35,12 @@ app.use(express.json());
 
 // Create instances of our room and state managers
 const roomManager = new RoomManager();
-con
+const stateManager = new StateManager();
 
 // Serve the React app for all non-API routes (for client-side routing)
 app.get('*', (req, res) => {
   res.sendFile(path.join(staticPath, 'index.html'));
-});st stateManager = new StateManager();
+});
 
 // Basic health check endpoint
 app.get('/health', (req, res) => {
