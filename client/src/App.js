@@ -20,6 +20,9 @@ function App() {
   
   // List of users in the current room
   const [users, setUsers] = useState([]);
+  
+  // Mobile sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   /**
    * Handle joining a room
@@ -46,6 +49,20 @@ function App() {
     setUsers(usersList);
   }, []);
 
+  /**
+   * Toggle mobile sidebar
+   */
+  const toggleSidebar = React.useCallback(() => {
+    setIsSidebarOpen(!isSidebarOpen);
+  }, [isSidebarOpen]);
+
+  /**
+   * Close sidebar when clicking outside
+   */
+  const closeSidebar = React.useCallback(() => {
+    setIsSidebarOpen(false);
+  }, []);
+
   // ============================================
   // CONDITIONAL RENDERING
   // If user hasn't joined a room, show room selector
@@ -64,6 +81,9 @@ function App() {
     <div className="app">
       {/* Header section with room info and controls */}
       <header className="app-header">
+        <button className="mobile-menu-btn" onClick={toggleSidebar}>
+          ☰
+        </button>
         <div className="header-left">
           <h1>Collaborative Canvas</h1>
           <span className="room-badge">Room: {currentRoom}</span>
@@ -73,10 +93,15 @@ function App() {
         </button>
       </header>
 
+      {/* Sidebar overlay for mobile */}
+      {isSidebarOpen && (
+        <div className="sidebar-overlay active" onClick={closeSidebar}></div>
+      )}
+
       {/* Main content area */}
       <div className="app-content">
         {/* Sidebar with toolbar and user list */}
-        <aside className="sidebar">
+        <aside className={`sidebar ${isSidebarOpen ? 'mobile-open' : ''}`}>
           <Toolbar 
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}

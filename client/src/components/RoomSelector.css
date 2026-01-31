@@ -292,18 +292,23 @@
   line-height: 1.6;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for tablets */
 @media (max-width: 768px) {
   .room-selector-card {
     padding: 2rem;
+    width: 85%;
   }
 
   .room-title {
     font-size: 2rem;
   }
 
+  .room-subtitle {
+    font-size: 1rem;
+  }
+
   .quick-join-buttons {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .input-group {
@@ -312,5 +317,175 @@
 
   .join-btn {
     width: 100%;
+  }
+
+  .create-btn {
+    font-size: 0.95rem;
+  }
+
+  .instructions {
+    padding: 1.2rem;
+  }
+
+  .instructions h3 {
+    font-size: 1rem;
+  }
+
+  .instructions li {
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .room-selector {
+    padding: 1rem 0;
+  }
+
+  .room-selector-card {
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 100%;
+    margin: 1rem;
+    border-radius: 15px;
+  }
+
+  .room-header {
+    margin-bottom: 1.8rem;
+  }
+
+  .room-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .room-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .room-form {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.5px;
+  }
+
+  .input-group {
+    gap: 8px;
+  }
+
+  .room-input {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+  }
+
+  .join-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  .divider {
+    margin: 1.5rem 0;
+    font-size: 0.85rem;
+  }
+
+  .create-room-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .create-btn {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+  }
+
+  .create-hint {
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .quick-join-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .quick-join-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .quick-btn {
+    padding: 0.7rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+
+  .instructions {
+    padding: 1rem;
+  }
+
+  .instructions h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .instructions li {
+    padding: 0.4rem 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .room-selector-card {
+    padding: 1.2rem;
+    margin: 0.8rem;
+  }
+
+  .room-title {
+    font-size: 1.3rem;
+  }
+
+  .room-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .form-label {
+    font-size: 0.75rem;
+  }
+
+  .room-input {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .join-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .create-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .quick-join-buttons {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .quick-btn {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .instructions {
+    padding: 0.8rem;
+    display: none;
   }
 }

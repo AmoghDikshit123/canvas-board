@@ -221,7 +221,170 @@
     padding: 1rem;
   }
 
+  .toolbar-title {
+    font-size: 1.1rem;
+  }
+
   .color-palette {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .color-btn {
+    width: 100%;
+  }
+
+  .stroke-widths {
+    gap: 6px;
+  }
+
+  .stroke-btn {
+    padding: 0.6rem;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .toolbar {
+    padding: 0.8rem;
+  }
+
+  .toolbar-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .toolbar-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.5px;
+  }
+
+  .toolbar-label-small {
+    font-size: 0.8rem;
+  }
+
+  .toolbar-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .color-palette {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .color-btn {
+    aspect-ratio: 1;
+  }
+
+  .color-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .color-btn.selected {
+    box-shadow: 0 0 10px var(--accent-primary);
+  }
+
+  .custom-color {
+    gap: 8px;
+    margin-bottom: 0.8rem;
+  }
+
+  .color-picker {
+    width: 50px;
+    height: 30px;
+  }
+
+  .current-color-preview {
+    padding: 0.6rem;
+    gap: 8px;
+  }
+
+  .color-preview {
+    width: 35px;
+    height: 35px;
+  }
+
+  .stroke-widths {
+    gap: 6px;
+    margin-bottom: 0.8rem;
+  }
+
+  .stroke-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .stroke-label {
+    font-size: 0.85rem;
+  }
+
+  .stroke-preview {
+    min-width: 20px;
+  }
+
+  .stroke-slider {
+    height: 5px;
+  }
+
+  .stroke-slider::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+
+  .stroke-preview-canvas {
+    padding: 0.8rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .toolbar {
+    padding: 0.6rem;
+  }
+
+  .toolbar-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .toolbar-label {
+    font-size: 0.75rem;
+  }
+
+  .toolbar-section {
+    margin-bottom: 1.2rem;
+  }
+
+  .color-palette {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .stroke-widths {
+    gap: 4px;
+  }
+
+  .stroke-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .custom-color {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .color-picker {
+    width: 100%;
+  }
+
+  .current-color-preview {
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  .color-preview {
+    width: 100%;
+    height: 30px;
   }
 }

@@ -216,7 +216,12 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
     if (!canvas) return;
 
     // Set canvas size to window size
-    canvas.width = window.innerWidth - 300; // Subtract sidebar width
+    // On mobile (< 480px), use full width since sidebar is hidden
+    // On desktop, subtract sidebar width
+    const isMobile = window.innerWidth < 480;
+    const sidebarWidth = isMobile ? 0 : 300;
+    
+    canvas.width = window.innerWidth - sidebarWidth;
     canvas.height = window.innerHeight - 80; // Subtract header height
 
     // Get 2D drawing context
@@ -332,8 +337,11 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
       // Save current drawing
       const tempStrokes = [...strokesRef.current];
 
-      // Resize canvas
-      canvas.width = window.innerWidth - 300;
+      // Resize canvas with responsive sidebar width
+      const isMobile = window.innerWidth < 480;
+      const sidebarWidth = isMobile ? 0 : 300;
+      
+      canvas.width = window.innerWidth - sidebarWidth;
       canvas.height = window.innerHeight - 80;
 
       // Restore drawing

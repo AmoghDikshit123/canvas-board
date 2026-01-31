@@ -61,6 +61,7 @@
   gap: 10px;
   z-index: 10;
   animation: slideIn 0.5s ease 0.2s both;
+  flex-wrap: wrap;
 }
 
 .control-btn {
@@ -96,6 +97,113 @@
 .control-btn.clear-btn:hover {
   background: rgba(255, 107, 157, 0.2);
   box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+}
+
+/* Remote cursors */
+.remote-cursor {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.cursor-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+}
+
+/* Drawing canvas element */
+.drawing-canvas {
+  cursor: crosshair;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Responsive adjustments for tablets */
+@media (max-width: 768px) {
+  .connection-status {
+    top: 15px;
+    right: 15px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .canvas-controls {
+    top: 15px;
+    left: 15px;
+    gap: 8px;
+  }
+
+  .control-btn {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 480px) {
+  .connection-status {
+    top: 10px;
+    right: 10px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    border-radius: 15px;
+  }
+
+  .canvas-controls {
+    top: 10px;
+    left: 10px;
+    gap: 6px;
+  }
+
+  .control-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.7rem;
+    border-radius: 6px;
+  }
+
+  .remote-cursor {
+    width: 16px;
+    height: 16px;
+    border-width: 1.5px;
+  }
+
+  .cursor-dot {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .canvas-controls {
+    flex-direction: column;
+    top: 8px;
+    left: 8px;
+    gap: 4px;
+  }
+
+  .control-btn {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+
+  .connection-status {
+    top: 8px;
+    right: 8px;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
 }
 
 /* The main drawing canvas */

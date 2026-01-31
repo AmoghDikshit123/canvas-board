@@ -99,7 +99,109 @@
   padding: 1rem;
   background: rgba(196, 113, 237, 0.1);
   border-radius: 8px;
+  border-left: 3px solid var(--accent-tertiary);
+}
+
+/* Responsive adjustments for tablets */
+@media (max-width: 768px) {
+  .user-list {
+    padding: 1.2rem;
+  }
+
+  .user-list-title {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .user-item {
+    gap: 10px;
+    padding: 0.8rem;
+  }
+
+  .user-id {
+    font-size: 0.8rem;
+  }
+
+  .user-tip {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .user-list {
+    padding: 1rem;
+  }
+
+  .user-list-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-users {
+    padding: 1.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .users {
+    gap: 8px;
+  }
+
+  .user-item {
+    gap: 10px;
+    padding: 0.7rem;
+    border-radius: 8px;
+  }
+
+  .user-color {
+    width: 14px;
+    height: 14px;
+  }
+
+  .user-id {
+    font-size: 0.75rem;
+  }
+
+  .user-list-footer {
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+  }
+
+  .user-tip {
+    font-size: 0.75rem;
+    padding: 0.6rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .user-list {
+    padding: 0.8rem;
+  }
+
+  .user-list-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .user-item {
+    padding: 0.6rem;
+    gap: 8px;
+  }
+
+  .user-id {
+    font-size: 0.7rem;
+  }
+
+  .user-tip {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    border-radius: 8px;
   border: 1px solid rgba(196, 113, 237, 0.3);
+  }
+
+  
 }
 
 /* Responsive adjustments */
