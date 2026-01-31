@@ -13,10 +13,13 @@ let socket = null;
 export const initSocket = () => {
   // Only create socket if it doesn't exist yet
   if (!socket) {
+    // Auto-detect server URL based on environment
+    const serverUrl = process.env.NODE_ENV === 'development' 
+      ? 'http://localhost:5000'
+      : window.location.origin;
+    
     // Connect to the server
-    // In development: http://localhost:5000
-    // In production: you'd change this to your deployed server URL
-    socket = io('http://localhost:5000', {
+    socket = io(serverUrl, {
       // Reconnection options
       reconnection: true,
       reconnectionDelay: 1000,

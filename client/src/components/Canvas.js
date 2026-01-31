@@ -306,6 +306,9 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
     // Cleanup function - runs when component unmounts
     return () => {
       if (socket) {
+        // Leave the room when component unmounts
+        socket.emit('leave_room');
+        
         socket.off('load_history');
         socket.off('remote_drawing');
         socket.off('users_update');
