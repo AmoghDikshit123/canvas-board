@@ -215,6 +215,39 @@
   border: 1px solid var(--border-color);
 }
 
+/* Eraser button styles */
+.eraser-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: rgba(255, 107, 157, 0.1);
+  border: 2px solid rgba(255, 107, 157, 0.3);
+  border-radius: 8px;
+  color: var(--accent-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Outfit', sans-serif;
+}
+
+.eraser-btn:hover {
+  background: rgba(255, 107, 157, 0.2);
+  border-color: var(--accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+}
+
+.eraser-btn.selected {
+  background: rgba(255, 107, 157, 0.3);
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 15px rgba(255, 107, 157, 0.6);
+  transform: scale(1.02);
+}
+
+.eraser-btn:active {
+  transform: translateY(0);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .toolbar {

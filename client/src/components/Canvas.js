@@ -5,7 +5,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { initSocket, getSocket } from '../utils/websocket';
 import './Canvas.css';
 
-function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
+function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }) {
   // ============================================
   // REFS - References to DOM elements
   // useRef persists values across renders without causing re-renders
@@ -68,19 +68,30 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
     const ctx = ctxRef.current;
     if (!ctx) return;
 
-    // Begin a new path
-    ctx.beginPath();
-    
-    // Set line style
-    ctx.strokeStyle = style.color;
-    ctx.lineWidth = style.width;
-    ctx.lineCap = 'round'; // Rounded line ends for smoother appearance
-    ctx.lineJoin = 'round'; // Rounded corners where lines meet
-    
-    // Draw the line
-    ctx.moveTo(start.x, start.y); // Starting point
-    ctx.lineTo(end.x, end.y);     // Ending point
-    ctx.stroke();                  // Actually draw the line
+    // If eraser mode, clear the pixels along the line
+    if (style.isEraser) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+      ctx.lineWidth = style.width;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(start.x, start.y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      // Normal drawing mode
+      ctx.beginPath();
+      ctx.strokeStyle = style.color;
+      ctx.lineWidth = style.width;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.moveTo(start.x, start.y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
+    }
   }, []);
 
   /**
@@ -137,8 +148,8 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
     // If not drawing, just update cursor position
     if (!isDrawingRef.current) return;
 
-    // Draw locally
-    const style = { color, width: strokeWidth };
+    // Draw locally with eraser or color mode
+    const style = { color: isEraser ? '#000000' : color, width: strokeWidth, isEraser };
     drawLine(lastPosRef.current, currentPos, style);
 
     // Create stroke data
@@ -162,7 +173,7 @@ function Canvas({ roomId, color, strokeWidth, onUsersUpdate }) {
 
     // Update last position for next segment
     lastPosRef.current = currentPos;
-  }, [color, strokeWidth, getCanvasCoordinates, drawLine]);
+  }, [color, strokeWidth, isEraser, getCanvasCoordinates, drawLine]);
 
   /**
    * Handle mouse up - stop drawing

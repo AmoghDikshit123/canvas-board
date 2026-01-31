@@ -2,7 +2,7 @@
 import React from 'react';
 import './Toolbar.css';
 
-function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth }) {
+function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth, isEraser, setIsEraser }) {
   // Predefined color palette
   const colors = [
     '#000000', // Black
@@ -50,9 +50,12 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth 
           {colors.map(color => (
             <button
               key={color}
-              className={`color-btn ${selectedColor === color ? 'selected' : ''}`}
+              className={`color-btn ${selectedColor === color && !isEraser ? 'selected' : ''}`}
               style={{ backgroundColor: color }}
-              onClick={() => handleColorChange(color)}
+              onClick={() => {
+                handleColorChange(color);
+                setIsEraser(false);
+              }}
               aria-label={`Select color ${color}`}
             />
           ))}
@@ -64,7 +67,10 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth 
           <input
             type="color"
             value={selectedColor}
-            onChange={(e) => handleColorChange(e.target.value)}
+            onChange={(e) => {
+              handleColorChange(e.target.value);
+              setIsEraser(false);
+            }}
             className="color-picker"
           />
         </div>
@@ -74,9 +80,21 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth 
           <span className="toolbar-label-small">Current:</span>
           <div 
             className="color-preview"
-            style={{ backgroundColor: selectedColor }}
+            style={{ backgroundColor: isEraser ? '#0a0e27' : selectedColor }}
           />
         </div>
+      </div>
+
+      {/* Eraser Tool Section */}
+      <div className="toolbar-section">
+        <label className="toolbar-label">Tool</label>
+        <button
+          className={`eraser-btn ${isEraser ? 'selected' : ''}`}
+          onClick={() => setIsEraser(!isEraser)}
+          title="Toggle eraser mode"
+        >
+          🧹 Eraser
+        </button>
       </div>
 
       {/* Stroke Width Selection Section */}

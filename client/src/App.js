@@ -17,6 +17,7 @@ function App() {
   // Drawing tool state
   const [selectedColor, setSelectedColor] = useState('#000000'); // Default black
   const [strokeWidth, setStrokeWidth] = useState(5); // Default stroke width
+  const [isEraser, setIsEraser] = useState(false); // Eraser mode toggle
   
   // List of users in the current room
   const [users, setUsers] = useState([]);
@@ -107,6 +108,8 @@ function App() {
             setSelectedColor={setSelectedColor}
             strokeWidth={strokeWidth}
             setStrokeWidth={setStrokeWidth}
+            isEraser={isEraser}
+            setIsEraser={setIsEraser}
           />
           <UserList users={users} />
         </aside>
@@ -117,6 +120,7 @@ function App() {
             roomId={currentRoom}
             color={selectedColor}
             strokeWidth={strokeWidth}
+            isEraser={isEraser}
             onUsersUpdate={handleUsersUpdate}
           />
         </main>
