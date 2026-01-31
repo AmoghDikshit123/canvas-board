@@ -26,7 +26,7 @@ class RoomManager {
     const room = this.rooms.get(roomId);
     room.users.set(userId, userData);
 
-    console.log(`📝 Room ${roomId} now has ${room.users.size} user(s)`);
+    console.log(`ðŸ“ Room ${roomId} now has ${room.users.size} user(s)`);
   }
 
   /**
@@ -45,9 +45,9 @@ class RoomManager {
     // If room is now empty, clean it up to save memory
     if (room.users.size === 0) {
       this.rooms.delete(roomId);
-      console.log(`🗑️ Room ${roomId} deleted (empty)`);
+      console.log(`ðŸ—‘ï¸ Room ${roomId} deleted (empty)`);
     } else {
-      console.log(`📝 Room ${roomId} now has ${room.users.size} user(s)`);
+      console.log(`ðŸ“ Room ${roomId} now has ${room.users.size} user(s)`);
     }
   }
 

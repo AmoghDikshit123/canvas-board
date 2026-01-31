@@ -66,7 +66,16 @@ io.on('connection', (socket) => {
   // When a user wants to join a specific drawing room
   // ============================================
   socket.on('join_room', (roomId) => {
-    // Add socket to the room
+    // If user was in a different room, leave it first
+    if (socket.currentRoom && socket.currentRoom !== roomId) {
+      const oldRoom = socket.currentRoom;
+      socket.leave(oldRoom);
+      roomManager.removeUser(oldRoom, socket.id);
+      io.to(oldRoom).emit('users_update', roomManager.getRoomUsers(oldRoom));
+      io.to(oldRoom).emit('user_disconnected', socket.id);
+    }
+
+    // Add socket to the new room
     socket.join(roomId);
     socket.currentRoom = roomId;
     
@@ -82,6 +91,27 @@ io.on('connection', (socket) => {
     
     // Notify everyone in the room about all current users
     io.to(roomId).emit('users_update', roomManager.getRoomUsers(roomId));
+  });
+
+  // ============================================
+  // EVENT: leave_room
+  // When a user wants to leave the current room
+  // ============================================
+  socket.on('leave_room', () => {
+    const roomId = socket.currentRoom;
+    
+    if (!roomId) return;
+    
+    socket.leave(roomId);
+    roomManager.removeUser(roomId, socket.id);
+    
+    console.log(`👤 User ${socket.id} left room: ${roomId}`);
+    
+    // Notify remaining users
+    io.to(roomId).emit('users_update', roomManager.getRoomUsers(roomId));
+    io.to(roomId).emit('user_disconnected', socket.id);
+    
+    socket.currentRoom = null;
   });
 
   // ============================================
