@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const path = require('path');
 const RoomManager = require('./rooms');
 const StateManager = require('./state-manager');
 
@@ -13,10 +14,11 @@ const app = express();
 const server = http.createServer(app);
 
 // Initialize Socket.io with CORS settings
-// CORS allows our React app (running on port 3000) to communicate with this server (port 5000)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // React app URL
+    origin: function(origin, callback) {
+      callback(null, true);
+    },
     methods: ["GET", "POST"]
   }
 });
@@ -24,12 +26,21 @@ const io = new Server(server, {
 // Enable CORS middleware for Express
 app.use(cors());
 
+// Serve static files from the React build directory
+const staticPath = path.join(__dirname, '../client/build');
+app.use(express.static(staticPath));
+
 // Parse JSON request bodies
 app.use(express.json());
 
 // Create instances of our room and state managers
 const roomManager = new RoomManager();
-const stateManager = new StateManager();
+con
+
+// Serve the React app for all non-API routes (for client-side routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
+});st stateManager = new StateManager();
 
 // Basic health check endpoint
 app.get('/health', (req, res) => {
