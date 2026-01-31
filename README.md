@@ -20,4 +20,7 @@ Event-driven architecture,
 Real-time cursor presence system,
 Component re-render optimization using refs,
 
+Realtime Communication:
+WebSockets (Socket-based communication layer)
+
 How it operates: Every drawing action is broadcast to every person in the room via sockets. Because strokes are stored locally, redrawing and undoing are seamless even after resizing.
