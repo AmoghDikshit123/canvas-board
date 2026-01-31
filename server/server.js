@@ -165,19 +165,20 @@ io.on('connection', (socket) => {
 
   // ============================================
   // EVENT: undo
-  // When a user wants to undo their last stroke
+  // When a user wants to undo the last stroke (global undo for the room)
   // ============================================
   socket.on('undo', () => {
     const roomId = socket.currentRoom;
     
     if (!roomId) return;
     
-    // Remove the last stroke made by THIS user (not anyone else's strokes)
-    const removedStroke = stateManager.undoStroke(roomId, socket.id);
+    // Remove the last stroke in the room (any user can undo any stroke)
+    const removedStroke = stateManager.undoStroke(roomId);
     
     if (removedStroke) {
       // Tell everyone in the room to remove this stroke
       io.to(roomId).emit('stroke_removed', removedStroke.id);
+      console.log(`↩️ User ${socket.id} triggered global undo for stroke ${removedStroke.id}`);
       console.log(`↩️ User ${socket.id} undid stroke ${removedStroke.id}`);
     }
   });

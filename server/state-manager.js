@@ -45,39 +45,27 @@ class StateManager {
   }
 
   /**
-   * Undo the last stroke made by a specific user
-   * This is the tricky part - we need to remove ONLY this user's last stroke,
-   * not anyone else's strokes
+   * Undo the last stroke in the room (global undo)
+   * Any user can undo any stroke - removes the most recent stroke regardless of who drew it
    * @param {string} roomId - The room identifier
-   * @param {string} userId - The socket ID of the user who wants to undo
    * @returns {object|null} The removed stroke, or null if nothing to undo
    */
-  undoStroke(roomId, userId) {
+  undoStroke(roomId) {
     const state = this.roomStates.get(roomId);
     
     if (!state || state.strokes.length === 0) {
       return null; // Nothing to undo
     }
 
-    // Find the LAST stroke made by this user (works even if a stroke is stored as multiple segments)
-    let lastStrokeIndex = -1;
-    for (let i = state.strokes.length - 1; i >= 0; i--) {
-      if (state.strokes[i].userId === userId) {
-        lastStrokeIndex = i;
-        break;
-      }
-    }
-
-    if (lastStrokeIndex === -1) return null; // nothing to undo
-
-    // Determine the stroke id for that last stroke (all segments of the gesture share this id)
-    const strokeId = state.strokes[lastStrokeIndex].id;
+    // Get the LAST stroke in the room (most recent, regardless of user)
+    const lastStroke = state.strokes[state.strokes.length - 1];
+    const strokeId = lastStroke.id;
 
     // Remove all segments that share the same stroke id
     const removedParts = state.strokes.filter(s => s.id === strokeId);
     state.strokes = state.strokes.filter(s => s.id !== strokeId);
 
-    console.log(`↩️ Removed ${removedParts.length} segments for stroke ${strokeId} from room ${roomId}`);
+    console.log(`↩️ Undo: Removed ${removedParts.length} segments for stroke ${strokeId} from room ${roomId}`);
 
     // Return a minimal object describing the removed stroke (id is what clients need)
     return { id: strokeId };
