@@ -3,37 +3,31 @@ import React from 'react';
 import './Toolbar.css';
 
 function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth, isEraser, setIsEraser }) {
+  // I picked a compact palette that's readable on dark backgrounds
   // Predefined color palette
   const colors = [
-    '#000000', // Black
-    '#FF0000', // Red
-    '#00FF00', // Green
-    '#0000FF', // Blue
-    '#FFFF00', // Yellow
-    '#FF00FF', // Magenta
-    '#00FFFF', // Cyan
-    '#FFA500', // Orange
-    '#800080', // Purple
-    '#FFC0CB', // Pink
-    '#A52A2A', // Brown
-    '#808080'  // Gray
+    '#000000',
+    '#FF0000',
+    '#00FF00',
+    '#0000FF',
+    '#FFFF00',
+    '#FF00FF',
+    '#00FFFF', 
+    '#FFA500',
+    '#800080',
+    '#FFC0CB',
+    '#A52A2A',
+    '#808080'
   ];
 
-  // Predefined stroke widths
   const strokeWidths = [2, 5, 10, 15, 20];
 
-  /**
-   * Handle color change
-   * This function is called when user clicks a color or uses the color picker
-   */
-  const handleColorChange = (color) => {
+  const handleColorChange = (color) =>{
     setSelectedColor(color);
   };
 
-  /**
-   * Handle stroke width change
-   */
-  const handleStrokeWidthChange = (width) => {
+
+  const handleStrokeWidthChange = (width) =>{
     setStrokeWidth(width);
   };
 
@@ -41,11 +35,10 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
     <div className="toolbar">
       <h3 className="toolbar-title">Drawing Tools</h3>
 
-      {/* Color Selection Section */}
       <div className="toolbar-section">
         <label className="toolbar-label">Color</label>
         
-        {/* Color palette grid */}
+        {/* Color palette*/}
         <div className="color-palette">
           {colors.map(color => (
             <button
@@ -61,7 +54,7 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
           ))}
         </div>
 
-        {/* Custom color picker */}
+        {/*Custom color picker*/}
         <div className="custom-color">
           <label className="toolbar-label-small">Custom:</label>
           <input
@@ -75,7 +68,6 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
           />
         </div>
 
-        {/* Show currently selected color */}
         <div className="current-color-preview">
           <span className="toolbar-label-small">Current:</span>
           <div 
@@ -85,7 +77,7 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
         </div>
       </div>
 
-      {/* Eraser Tool Section */}
+      {/* Eraser Tool*/}
       <div className="toolbar-section">
         <label className="toolbar-label">Tool</label>
         <button
@@ -101,7 +93,6 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
       <div className="toolbar-section">
         <label className="toolbar-label">Brush Size</label>
         
-        {/* Stroke width buttons */}
         <div className="stroke-widths">
           {strokeWidths.map(width => (
             <button
@@ -122,7 +113,7 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
           ))}
         </div>
 
-        {/* Custom stroke width slider */}
+        {/*Custom stroke width slider*/}
         <div className="custom-stroke">
           <label className="toolbar-label-small">
             Custom: {strokeWidth}px
@@ -138,7 +129,6 @@ function Toolbar({ selectedColor, setSelectedColor, strokeWidth, setStrokeWidth,
         </div>
       </div>
 
-      {/* Preview Section - shows how the stroke will look */}
       <div className="toolbar-section">
         <label className="toolbar-label">Preview</label>
         <div className="stroke-preview-canvas">

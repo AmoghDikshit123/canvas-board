@@ -1,5 +1,3 @@
-/* RoomSelector.css - Styles for the room selection screen */
-
 .room-selector {
   width: 100vw;
   height: 100vh;
@@ -37,7 +35,6 @@
   }
 }
 
-/* Header section */
 .room-header {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -67,7 +64,6 @@
   font-weight: 400;
 }
 
-/* Form styles */
 .room-form {
   margin-bottom: 2rem;
 }
@@ -139,7 +135,6 @@
   cursor: not-allowed;
 }
 
-/* Divider */
 .divider {
   display: flex;
   align-items: center;
@@ -161,7 +156,6 @@
   padding: 0 1rem;
 }
 
-/* Create room section */
 .create-room-section {
   text-align: center;
   margin-bottom: 2rem;
@@ -198,7 +192,6 @@
   font-style: italic;
 }
 
-/* Quick join section */
 .quick-join-section {
   margin-bottom: 2rem;
 }
@@ -233,7 +226,6 @@
   transform: translateY(0);
 }
 
-/* Instructions section */
 .instructions {
   background: rgba(0, 217, 255, 0.05);
   border: 1px solid var(--border-color);
@@ -260,7 +252,6 @@
   line-height: 1.6;
 }
 
-/* Responsive adjustments for tablets */
 @media (max-width: 768px) {
   .room-selector-card {
     padding: 2rem;
@@ -304,7 +295,6 @@
   }
 }
 
-/* Mobile responsive */
 @media (max-width: 480px) {
   .room-selector {
     padding: 1rem 0;
@@ -408,7 +398,6 @@
   }
 }
 
-/* Extra small devices */
 @media (max-width: 360px) {
   .room-selector-card {
     padding: 1.2rem;

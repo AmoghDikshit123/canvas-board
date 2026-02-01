@@ -3,56 +3,40 @@ import React, { useState } from 'react';
 import './RoomSelector.css';
 
 function RoomSelector({ onJoinRoom }) {
-  // State to store the room ID entered by user
+  //State that store the room ID entered by user
   const [roomInput, setRoomInput] = useState('');
 
-  /**
-   * Generate a random room ID
-   * Uses current timestamp + random number for uniqueness
-   */
-  const generateRoomId = () => {
+  const generateRoomId = () =>{
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 1000);
     return `room-${timestamp}-${random}`;
   };
 
-  /**
-   * Handle form submission when user clicks "Join Room"
-   */
-  const handleJoinRoom = (e) => {
-    e.preventDefault(); // Prevent page reload on form submit
+  const handleJoinRoom = (e) =>{
+    e.preventDefault();
     
-    if (roomInput.trim()) {
+    if (roomInput.trim()){
       onJoinRoom(roomInput.trim());
     }
   };
 
-  /**
-   * Handle "Create New Room" button click
-   * Generates a random room ID and joins automatically
-   */
-  const handleCreateRoom = () => {
+  const handleCreateRoom = () =>{
     const newRoomId = generateRoomId();
     onJoinRoom(newRoomId);
   };
 
-  /**
-   * Handle quick join to a predefined room
-   */
-  const handleQuickJoin = (roomId) => {
+  const handleQuickJoin = (roomId) =>{
     onJoinRoom(roomId);
   };
 
   return (
     <div className="room-selector">
       <div className="room-selector-card">
-        {/* Header */}
         <div className="room-header">
           <h1 className="room-title">Collaborative Canvas</h1>
           <p className="room-subtitle">Draw together in real-time</p>
         </div>
 
-        {/* Join existing room section */}
         <form onSubmit={handleJoinRoom} className="room-form">
           <label className="form-label">Join Existing Room</label>
           <div className="input-group">
@@ -73,12 +57,10 @@ function RoomSelector({ onJoinRoom }) {
           </div>
         </form>
 
-        {/* Divider */}
         <div className="divider">
           <span>OR</span>
         </div>
 
-        {/* Create new room section */}
         <div className="create-room-section">
           <button 
             onClick={handleCreateRoom}
@@ -116,7 +98,7 @@ function RoomSelector({ onJoinRoom }) {
           </div>
         </div>
 
-        {/* Instructions */}
+        {/*Instructions*/}
         <div className="instructions">
           <h3>How it works</h3>
           <ul>

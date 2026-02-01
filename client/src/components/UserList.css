@@ -1,5 +1,3 @@
-/* UserList.css - Styles for the active users list */
-
 .user-list {
   padding: 1.5rem;
   flex: 1;
@@ -102,7 +100,6 @@
   border-left: 3px solid var(--accent-tertiary);
 }
 
-/* Responsive adjustments for tablets */
 @media (max-width: 768px) {
   .user-list {
     padding: 1.2rem;
@@ -128,7 +125,6 @@
   }
 }
 
-/* Mobile responsive */
 @media (max-width: 480px) {
   .user-list {
     padding: 1rem;
@@ -174,7 +170,6 @@
   }
 }
 
-/* Extra small devices */
 @media (max-width: 360px) {
   .user-list {
     padding: 0.8rem;
@@ -204,7 +199,6 @@
   
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .user-list {
     padding: 1rem;

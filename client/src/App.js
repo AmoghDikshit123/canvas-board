@@ -7,25 +7,19 @@ import RoomSelector from './components/RoomSelector';
 import './App.css';
 
 function App() {
-  // ============================================
-  // STATE MANAGEMENT using useState hook
-  // ============================================
-  
-  // Room state - which room the user is in
   const [currentRoom, setCurrentRoom] = useState(null);
+  //states with default values
+  const [selectedColor, setSelectedColor] = useState('#000000'); 
+  const [strokeWidth, setStrokeWidth] = useState(5);
+  const [isEraser, setIsEraser] = useState(false);
   
-  // Drawing tool state
-  const [selectedColor, setSelectedColor] = useState('#000000'); // Default black
-  const [strokeWidth, setStrokeWidth] = useState(5); // Default stroke width
-  const [isEraser, setIsEraser] = useState(false); // Eraser mode toggle
-  
-  // List of users in the current room
+  //List of users in the current room
   const [users, setUsers] = useState([]);
   
-  // Mobile sidebar state
+  //Mobile sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  /**
+  /*
    * Handle joining a room
    * This function is passed down to RoomSelector component
    */
@@ -33,7 +27,7 @@ function App() {
     setCurrentRoom(roomId);
   }, []);
 
-  /**
+  /*
    * Handle leaving a room
    * Resets the room state so user can join a different room
    */
@@ -42,7 +36,7 @@ function App() {
     setUsers([]);
   }, []);
 
-  /**
+  /*
    * Update the list of users when new users join or leave
    * This function is passed down to Canvas component
    */
@@ -50,25 +44,16 @@ function App() {
     setUsers(usersList);
   }, []);
 
-  /**
-   * Toggle mobile sidebar
-   */
   const toggleSidebar = React.useCallback(() => {
     setIsSidebarOpen(!isSidebarOpen);
   }, [isSidebarOpen]);
 
-  /**
-   * Close sidebar when clicking outside
-   */
   const closeSidebar = React.useCallback(() => {
     setIsSidebarOpen(false);
   }, []);
 
-  // ============================================
-  // CONDITIONAL RENDERING
-  // If user hasn't joined a room, show room selector
+  //If user hasn't joined a room, show room selector
   // If user is in a room, show the canvas and tools
-  // ============================================
   
   if (!currentRoom) {
     return (
@@ -80,7 +65,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* Header section with room info and controls */}
       <header className="app-header">
         <button className="mobile-menu-btn" onClick={toggleSidebar}>
           ☰
@@ -94,14 +78,12 @@ function App() {
         </button>
       </header>
 
-      {/* Sidebar overlay for mobile */}
+      {/* Sidebar for mobile */}
       {isSidebarOpen && (
         <div className="sidebar-overlay active" onClick={closeSidebar}></div>
       )}
 
-      {/* Main content area */}
       <div className="app-content">
-        {/* Sidebar with toolbar and user list */}
         <aside className={`sidebar ${isSidebarOpen ? 'mobile-open' : ''}`}>
           <Toolbar 
             selectedColor={selectedColor}
@@ -114,7 +96,7 @@ function App() {
           <UserList users={users} />
         </aside>
 
-        {/* Canvas area - the main drawing surface */}
+        {/* Canvas area - drawing surface */}
         <main className="canvas-container">
           <Canvas 
             roomId={currentRoom}
