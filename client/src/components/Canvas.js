@@ -5,7 +5,6 @@ import { initSocket, getSocket } from '../utils/websocket';
 import './Canvas.css';
 
 function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
-  // refs: DOM nodes and mutable holders that don't trigger rerenders
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const isDrawingRef = useRef(false);
@@ -14,11 +13,9 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
   const currentStrokeIdRef = useRef(null);
   const remoteCursorsRef = useRef(new Map());
 
-  // state used for rendering
   const [isConnected, setIsConnected] = useState(false);
   const [remoteCursors, setRemoteCursors] = useState([]);
 
-  // Convert client (mouse) coordinates into real canvas pixels
   const getCanvasCoordinates = useCallback((event, canvas) => {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -29,7 +26,6 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
     };
   }, []);
 
-  // Draw a single segment. Eraser uses destination-out so we erase pixels.
   const drawLine = useCallback((start, end, style) => {
     const ctx = ctxRef.current;
     if (!ctx) return;
@@ -58,7 +54,7 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
     }
   }, []);
 
-  // Clear and replay stroke history — used after undo or when loading history
+  // Clear and replay stroke history – used after undo or when loading history
   const redrawCanvas = useCallback(() =>{
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
@@ -69,7 +65,7 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
     });
   }, [drawLine]);
 
-  // Start a new stroke (give the gesture a shared id for undo)
+  //Start a new stroke (give the gesture a shared id for undo)
   const handleMouseDown = useCallback((e) =>{
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -96,7 +92,7 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
       style: style,
       id: currentStrokeIdRef.current || `${socket.id}-${Date.now()}`
     };
-    // keep every tiny segment; grouped by id for sensible undo behavior
+    // keep every tiny segment; grouped by id for proper undo behavior
     strokesRef.current.push(strokeData);
     socket.emit('drawing_step', {
       start: lastPosRef.current,
@@ -112,11 +108,18 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
     currentStrokeIdRef.current = null;
   }, []);
 
-  // Tell server to undo the most recent stroke for the room
+  //Tells the server to undo the most recent stroke for the room.
   const handleUndo = useCallback(() =>{
     const socket = getSocket();
     if (!socket) return;
     socket.emit('undo');
+  }, []);
+
+  // Tell server to redo the most recently undone stroke for the room
+  const handleRedo = useCallback(() =>{
+    const socket = getSocket();
+    if (!socket) return;
+    socket.emit('redo');
   }, []);
 
   const handleClear = useCallback(() =>{
@@ -125,13 +128,12 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
     socket.emit('clear_canvas');
   }, []);
 
-  // Render-friendly snapshot of remote cursors
   const drawRemoteCursors = useCallback(() =>{
     const cursors = Array.from(remoteCursorsRef.current.values());
     setRemoteCursors(cursors);
   }, []);
 
-  // Initialize canvas size, socket, and all socket listeners
+  //Initialize canvas size, socket, and all socket listeners
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -168,6 +170,13 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
         strokesRef.current = strokesRef.current.filter(s => s.id !== strokeId);
         redrawCanvas();
       });
+      socket.on('stroke_restored', (strokes) =>{
+        //Adds all the parts of the restored stroke back.
+        strokes.forEach(stroke => {
+          strokesRef.current.push(stroke);
+        });
+        redrawCanvas();
+      });
       socket.on('canvas_cleared',() =>{
         strokesRef.current = [];
         redrawCanvas();
@@ -185,13 +194,14 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
         socket.off('users_update');
         socket.off('cursor_update');
         socket.off('stroke_removed');
+        socket.off('stroke_restored');
         socket.off('canvas_cleared');
         socket.off('user_disconnected');
       }
     };
   },[roomId, onUsersUpdate, drawLine, redrawCanvas, drawRemoteCursors]);
 
-  // Resize canvas on window change, preserve drawn strokes
+  //Resizes canvas on window change, preserve drawn strokes.
   useEffect(() =>{
     const handleResize =() =>{
       const canvas = canvasRef.current;
@@ -208,7 +218,6 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
     return () => window.removeEventListener('resize', handleResize);
   }, [redrawCanvas]);
 
-  // UI: canvas + minimal controls
   return (
     <div className="canvas-wrapper">
       <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
@@ -217,6 +226,7 @@ function Canvas({ roomId, color, strokeWidth, isEraser, onUsersUpdate }){
 
       <div className="canvas-controls">
         <button onClick={handleUndo} className="control-btn">↩️ Undo</button>
+        <button onClick={handleRedo} className="control-btn">↪️ Redo</button>
         <button onClick={handleClear} className="control-btn clear-btn">🗑️ Clear All</button>
       </div>
 
