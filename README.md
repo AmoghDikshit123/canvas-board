@@ -1,3 +1,7 @@
+URL: https://canvas-board.onrender.com/
+Deployed on RENDER platform.
+
+
 Collaborative Canvas: Several users can join the same room and work together on a shared canvas using this real-time collaborative drawing app.
 
 Features: 
